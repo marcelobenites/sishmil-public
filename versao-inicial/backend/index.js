@@ -7,6 +7,7 @@ app.db = db/**Instancia do knex ja configurado em db.js que faz a conexao com o 
 
 consign()
     .then('./config/middlewares.js')
+    .then('./api/validator.js')
     .then('./api')
     .then('./config/routes.js')
     .into(app )/**Passa a instancia do express app para o arquivo middlewares */
