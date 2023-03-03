@@ -36,9 +36,9 @@ module.exports = app =>{
                 .where({parentId: req.params.id})
             notExistsOrError(subcategory, 'Categoria possui subcategorias.')
 
-            const articles = await app.db('articles')
+            /* const articles = await app.db('articles')
                 .where({parentId: req.params.id})
-            notExistsOrError(articles, 'Categoria possui artigos.')
+            notExistsOrError(articles, 'Categoria possui artigos.') */
 
             const rowsDeleted = await app.db('categories')
                 .where({id: req.params.id}).del()
@@ -96,5 +96,25 @@ module.exports = app =>{
             .catch(err => res.status(500).send(err))
     }
 
-    return {save, get, getById, remove}
+
+    /**Funcao recursiva que tranforma um array de categorias em uma estrutura de arvore */
+    const toTree = (categories, tree) => {
+        if(!tree)  tree = categories.filter(c => !c.parentId)
+        tree = tree.map(parentNode => {
+            const isChild = node =>node.parentId == parentNode.id
+            parentNode.children = toTree(categories, categories.filter(isChild))
+            return parentNode
+        })
+        return tree
+    }
+
+    /**Servico que sera mapeado para /categories/tree */
+    const getTree = (req, res) => {
+        app.db('categories')
+            .then(categories => res.json(toTree(withPath(categories))))
+            .catch(err => res.status(500).send(err))
+    }
+
+
+    return {save, get, getById, getTree, remove}
 }

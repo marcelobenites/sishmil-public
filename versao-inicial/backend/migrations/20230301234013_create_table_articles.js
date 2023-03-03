@@ -11,7 +11,7 @@ exports.up = function(knex) {
         table.binary('content').notNullable()
         table.integer('userId').references('id')
             .inTable('users').notNullable()
-        table.integer('cotegoryId').references('id')
+        table.integer('categoryId').references('id')
             .inTable('categories').notNullable()
 
     })

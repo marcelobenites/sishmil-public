@@ -1,6 +1,5 @@
 module.exports = app =>{
     function existsOrError(value, msg){/**Teste de validacao de string*/
-        console.log('Verificando se existe o parametro')
         if(!value) throw msg/**Valor e falso */
         if(Array.isArray(value) && value.length == 0) throw msg /**E um array vazio*/
         if(typeof value === 'string' && !value.trim()) throw msg /**Strings com espacos em branco */
